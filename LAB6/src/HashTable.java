@@ -21,6 +21,11 @@ public class HashTable<T> {
      * @param size the table size
      */
     public HashTable(int size) {
+        numElements = 0;
+        Table = new ArrayList<List<T>>();
+        for (int i = 0; i != size; i++) {
+        	Table.add(new List<T>());
+        }
         
     }
        
@@ -45,7 +50,11 @@ public class HashTable<T> {
      * @throws IndexOutOfBoundsException
      */
     public int countBucket(int index) throws IndexOutOfBoundsException{
-        return -1;
+    	if(0 < index || index >= Table.size())
+    	{
+    		throw new IndexOutOfBoundsException("countBucket: iindex is outside bounds of the table");
+    	}
+    	return Table.get(index).getLength();
     }
     
     /**
@@ -53,7 +62,7 @@ public class HashTable<T> {
      * @return total number of keys
      */
     public int getNumElements() {
-        return -1;
+        return numElements;
     }
     
     /**
@@ -65,7 +74,11 @@ public class HashTable<T> {
      * @throws NullPointerException if the specified key is null
      */
     public T get(T t) throws NullPointerException{
-        return null;
+    	if(t == null) throw new NullPointerException("T is empty, NullPointerException");
+    	
+    	System.out.println("linearSearch: " + Table.get(hash(t)).linearSearch(t));
+    	
+        return t;
     }
     
     /**
@@ -77,7 +90,18 @@ public class HashTable<T> {
      * @throws NullPointerException if the specified key is null
      */
     public boolean contains(T t) throws NullPointerException{
-        return false;
+    	if(t == null) {
+    	      throw new NullPointerException("search: element cannot be null");
+    	   }
+    	int bucket = hash(t);
+    	Table.get(bucket).placeIterator();
+    	for (int i = 0; i < Table.get(bucket).getLength(); i++) {
+    		if (Table.get(bucket).getIterator().equals(t)) {
+    			return true;
+    	      }
+    	      Table.get(bucket).advanceIterator();
+    	   }
+    	return false;
     }
     
      
@@ -92,7 +116,13 @@ public class HashTable<T> {
      * @throws NullPointerException for a null key
      */
     public void insert(T t) throws NullPointerException{  
-        
+        if(t == null)
+        {
+        	throw new NullPointerException("insert: element to insert cannot be null.");
+        }
+        int bucket = hash(t);
+        Table.get(bucket).addLast(t);
+        numElements++;
     }  
      
      
@@ -106,7 +136,19 @@ public class HashTable<T> {
      * @throws NullPointerException if the key is null
      */
     public void remove(T t) throws NullPointerException {
-        
+    	if(t == null) {
+    	     throw new NullPointerException("remove: element cannot be null");
+    	   }
+       int bucket = hash(t);
+       Table.get(bucket).placeIterator();
+       while(!Table.get(bucket).offEnd()) {
+          if (Table.get(bucket).getIterator().equals(t)) {
+        	  Table.get(bucket).removeIterator();
+             numElements--;
+             return;
+          }
+          Table.get(bucket).advanceIterator();
+       }
     }
     
     /**
@@ -151,7 +193,7 @@ public class HashTable<T> {
      * all elements at all buckets into one String
      */
     @Override public String toString() {
-        
+        return " ";
     }
     
 }
