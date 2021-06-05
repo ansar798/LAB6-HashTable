@@ -237,7 +237,7 @@ public void sellFund(String name) {
 * @param name the name of the fund
 */
 public void sellShares(String name, double shares) {
-
+	
 }
 
 
@@ -253,7 +253,10 @@ public void sellShares(String name, double shares) {
 */
 
 @Override public String toString() {
-
+	DecimalFormat df = new DecimalFormat("###,###,###.00");
+ return "Name: " + this.firstName + " " + this.lastName
+		 + "\nAccount Number: " + this.accountNum
+		 + "\nTotal Cash: $" + df.format(this.cash);
 }
 
 /**
@@ -261,7 +264,7 @@ public void sellShares(String name, double shares) {
 * alphabetized by name
 */
 public void printAccountsByName() {
-
+	funds_name.inOrderPrint();
 }
 
 /**
@@ -269,6 +272,7 @@ public void printAccountsByName() {
 * in increasing order of value
 */
 public void printAccountsByValue() {
+	funds_value.inOrderPrint();
 
 }
 
@@ -294,7 +298,12 @@ return false;
 * @return the hash code
 */
 @Override public int hashCode() {
-return -1;
+	String key = this.email + this.password;
+    int sum = 0;
+    for (int i = 0; i < key.length(); i++) {
+        sum += (int) key.charAt(i);
+    }
+    return sum;
 }
 
 }
