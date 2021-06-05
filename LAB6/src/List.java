@@ -389,7 +389,7 @@ public class List<T> {
 		Node temp = first;
 		int i = 1;
 		while (temp != null) {
-			result += i + ". " + temp.data + "\n";
+			result += temp.data + "\n";
 			temp = temp.next;
 			i++;
 		}
