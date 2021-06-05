@@ -1,11 +1,10 @@
 
 /**
  * MutualFund.java
- * @author PARTNER_NAME_1
- * @author PARTNER_NAME_1
+ * @author Yadwinder Grewal
+ * @author Ansar Shaikh
  * CIS 22C, Lab 6
  */
-
 import java.text.DecimalFormat;
 
 public class MutualFund {
