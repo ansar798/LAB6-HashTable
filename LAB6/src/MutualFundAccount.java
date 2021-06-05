@@ -1,8 +1,8 @@
 
 /**
  * MutualFundAccount.java
- * @author PARTNER_NAME_1
- * @authoer PARTNER_NAME_2
+ * @author Yadwinder Grewal
+ * @author Ansar Shaikh
  * CIS 22C, Lab 6
  */
 
