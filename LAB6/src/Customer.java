@@ -6,6 +6,7 @@
 */
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.text.DecimalFormat;
 
 public class Customer {
@@ -80,7 +81,6 @@ public Customer(String firstName, String lastName, String email, String password
 	this.password = password;
 	this.cash = cash;
 	this.accountNum = MutualFundAccount.getAccountSeed() + "";
-	
 }
 
 /**ACCESORS*/
@@ -135,7 +135,8 @@ public boolean passwordMatch(String anotherPassword) {
 * @return the specified mutual fund
 */
 public MutualFundAccount getAccountByName(String name) {
-return null;
+	return funds_name.search(new MutualFundAccount(new MutualFund(name, "")), 
+			new NameComparator());
 }
 
 /**
@@ -153,7 +154,7 @@ return cash;
 * holds any accounts
 */
 public boolean hasOpenAccounts() {
-return false;
+	return !funds_name.isEmpty();
 }
 
 /**MUTATORS*/
@@ -212,8 +213,25 @@ public void updateCash(double cash) {
 * Decreases the amount of cash if purchase made
 */
 public boolean addFund(double shares, MutualFund mf) {
-
-return false;
+	NameComparator nC = new NameComparator();
+	ValueComparator vC = new ValueComparator();
+	if (Double.compare(cash, mf.getPricePerShare()) < 0) {
+		return false;
+	} else {
+		MutualFundAccount addFund = new MutualFundAccount(mf, shares);
+		MutualFundAccount name_BST = funds_name.search(addFund, nC);
+		if (name_BST != null) {
+			funds_value.remove(name_BST, vC);
+			name_BST.updateShares(shares);
+			funds_value.insert(name_BST, vC);
+		} else {
+			funds_value.insert(addFund, vC);
+			funds_name.insert(addFund, nC);
+			
+		}
+		updateCash(-(shares * mf.getPricePerShare()));
+		return true;
+	}
 }
 
 /**
@@ -225,7 +243,14 @@ return false;
 * @param name the name of the fund
 */
 public void sellFund(String name) {
-
+	MutualFundAccount fSell = funds_name.search(new MutualFundAccount(new MutualFund(name, "")),
+			new NameComparator());
+	double shares = fSell.getNumShares();
+	double pShare = fSell.getMf().getPricePerShare();
+	double fee = fSell.getMf().getTradingFee();
+	funds_name.remove(fSell, new NameComparator());
+	funds_value.remove(fSell, new NameComparator());
+	updateCash(pShare * shares - fee * 0.01 * pShare * shares);
 }
 
 /**
@@ -237,7 +262,20 @@ public void sellFund(String name) {
 * @param name the name of the fund
 */
 public void sellShares(String name, double shares) {
-	
+	MutualFundAccount fSell = funds_name.search(new MutualFundAccount(new MutualFund(name, "")),
+			new NameComparator());
+	double pricePerShare = fSell.getMf().getPricePerShare();
+	double fee = fSell.getMf().getTradingFee();
+	if (Double.compare(shares, fSell.getNumShares()) == 0) {
+		funds_name.remove(fSell, new NameComparator());
+		funds_value.remove(fSell, new NameComparator());
+	} else {
+		funds_value.remove(fSell, new ValueComparator());
+		fundAccToSell.updateShares(-shares);
+		funds_value.insert(fSell, new ValueComparator());
+	}
+	updateCash(pricePerShare * shares - fee * 0.01 * pricePerShare * shares);
+}
 }
 
 
@@ -287,7 +325,17 @@ public void printAccountsByValue() {
 * to this Customer
 */
 @Override public boolean equals(Object o) {
-return false;
+	if (o == this) {
+		return true;
+	} else if (!(o instanceof Customer)) {
+		return false;
+	} else {
+		Customer c = (Customer) o;
+		if (this.email.equals(c.email) && this.password.equals(c.password)) {
+			return true;
+		}
+	}
+	return false;
 }
 
 /**
