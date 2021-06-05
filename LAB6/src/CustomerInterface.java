@@ -16,7 +16,7 @@ public class CustomerInterface {
 	HashTable<MutualFund> funds = new HashTable<>(NUM_MUTUAL_FUNDS * 2);
 	HashTable<Customer> customers = new HashTable<>(NUM_CUSTOMERS);	
 	DecimalFormat df = new DecimalFormat("###,##0.00");
-	String first, last, email, password, mutualName, ticker;
+	String first = "", last = "", email, password, mutualName, ticker;
 	double cash, sharePrice, numShares, fee;
 	File file1 = new File("mutual_funds.txt");
 	File file2 = new File("customers.txt");
@@ -27,8 +27,11 @@ public class CustomerInterface {
 	{
 		mutualName = inputfile1.nextLine();
 		ticker = inputfile1.nextLine();
-		sharePrice = Double.parseDouble(inputfile1.nextLine());
-		fee = Double.parseDouble(inputfile1.nextLine());
+		sharePrice = inputfile1.nextDouble();
+		inputfile1.nextLine();
+		fee = inputfile1.nextDouble();
+		inputfile1.nextLine();
+		
 		funds.insert(new MutualFund(mutualName, ticker,sharePrice, fee));
 	}
 	inputfile1.close();
@@ -40,24 +43,29 @@ public class CustomerInterface {
 	{
 		first = inputfile2.next();
 		last = inputfile2.next();
+		inputfile2.nextLine();
 		email = inputfile2.nextLine();
 		password = inputfile2.nextLine();
-		cash = Double.parseDouble(inputfile2.nextLine());
-		int na = inputfile2.nextInt();
-		for (int i = 0; i < na; i++) {
+		cash = inputfile2.nextDouble();
+		int totalfunds = inputfile2.nextInt();
+		inputfile2.nextLine();
+		for (int i = 0; i < totalfunds; i++) {
 			ticker = inputfile2.nextLine();
-			numShares = Double.parseDouble(inputfile2.nextLine());
-			MutualFund mutufund = funds.get(new MutualFund(ticker));
+			numShares = inputfile2.nextDouble();
 			inputfile2.nextLine();
+			
+			MutualFund mutufund = funds.get(new MutualFund(ticker));
 			mutuFundAcc.add(new MutualFundAccount(mutufund, numShares));
 		}	
+		
 		customers.insert(new Customer(first, last, email, password, cash, mutuFundAcc));
 	}
+	//System.out.println(customers);
 	inputfile2.close();
 	//Scanner
 	Scanner input = new Scanner(System.in);
 	// Console Output
-	System.out.print("Welcome to Mutual Fund InvestorTrack (TM)!\nPlease enter your email address: ");
+	System.out.print("Welcome to Mutual Fund InvestorTrack (TM)!\n\nPlease enter your email address: ");
 	email = input.nextLine();
 	System.out.print("Please enter your password: ");
 	password = input.nextLine();
@@ -71,7 +79,7 @@ public class CustomerInterface {
 		last = input.nextLine();
 		customers.insert(new Customer(first, last, email, password));
 	}
-	System.out.println("\nWelcome, " + cstmr.getFirstName() + " " + cstmr.getLastName() + "!\n");
+	System.out.println("\nWelcome, " + first + " " + last + "!\n");
 	boolean isFinished = false;
 	String userChoices = "";
 	while(!isFinished)
@@ -81,14 +89,15 @@ public class CustomerInterface {
 				+ "B. Sell a Fund\n"
 				+ "C. Add Cash\n"
 				+ "D. Display Your Current Funds\n"
-				+ "X. Exit\n\n"
-				+ "Enter your choice: ");
+				+ "X. Exit\n"
+				+ "\nEnter your choice: ");
 		userChoices = input.next().toUpperCase();
 		switch(userChoices) {
 		case("A"): // Purchase a funds
 		{
 			System.out.println("\nPlease select from the options below:\n");
 			System.out.println(funds);
+			input.nextLine();
 			System.out.print("Enter the ticker of the fund to purchase: ");
 			String purchesTicker = input.nextLine();
 			System.out.print("\nEnter the number of shares to purchase: ");
@@ -120,8 +129,8 @@ public class CustomerInterface {
 				cstmr.printAccountsByName();
 				System.out.print("\nEnter the name of the fund to sell: ");
 				mutualFundName = input.nextLine();
-				MutualFundAccount fundAccToSell = cstmr.getAccountByName(mutualFundName);
-				if (fundAccToSell == null) {
+				MutualFundAccount fSell = cstmr.getAccountByName(mutualFundName);
+				if (fSell == null) {
 					System.out.println("Sorry you don't own an account by that name.");
 				} else {
 					System.out.print("Enter the number of shares to sell or \"all\" to sell everything: ");
@@ -152,11 +161,11 @@ public class CustomerInterface {
 		case("D"): // Display Funds
 		{
 			if (funds.getNumElements() == 0 || !cstmr.hasOpenAccounts()) {
-				System.out.println("\nYou don't have any funds to display at this time.\n");				
+				System.out.println("\nYou don't have any funds to display at this time.");				
 			}
 			else
 			{
-				System.out.print("\nView Your Mutual Funds By:.\n\n1. Name\n2. Value\n\\nEnter your choice (1 or 2): ");
+				System.out.print("\nView Your Mutual Funds By:.\n\n1. Name\n2. Value\n\nEnter your choice (1 or 2): ");
 				int userNum = input.nextInt();
 				if (userNum == 1) {
 					cstmr.printAccountsByName();
@@ -167,17 +176,18 @@ public class CustomerInterface {
 					System.out.println("\nInvalid choice!");
 				}
 			}
-			
+
 			break;
 		}
 		case("X"):
 		{
 			System.out.println("\nGoodbye!");
+			isFinished = true;
 			break;
 		}
 		default: 
 		{
-			System.out.println("\\nInvalid menu option. Please enter A-D or X to exit.\n");
+			System.out.println("\nInvalid menu option. Please enter A-D or X to exit.\n");
 			break;
 		}
 		}
