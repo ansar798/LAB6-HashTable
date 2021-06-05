@@ -34,7 +34,12 @@ private BST<MutualFundAccount> funds_name = new BST<>();
 */
 
 public Customer(String email, String password) {
-
+	this.email = email;
+	this.password = password;
+	this.firstName = "first name unknown";
+	this.lastName = "last name unknown";
+	this.cash = 0;
+	this.accountNum = "none";
 }
 
 /**
@@ -48,7 +53,12 @@ public Customer(String email, String password) {
 * correctly!
 */
 public Customer(String firstName, String lastName, String email, String password) {
-
+	this.email = email;
+	this.password = password;
+	this.firstName = firstName;
+	this.lastName = lastName;
+	this.cash = 0;
+	this.accountNum = MutualFundAccount.getAccountSeed() + "";
 }
 
 /**
@@ -64,7 +74,13 @@ public Customer(String firstName, String lastName, String email, String password
 * correctly!
 */
 public Customer(String firstName, String lastName, String email, String password, double cash, ArrayList<MutualFundAccount> al) {
-
+	this.firstName = firstName;
+	this.lastName = lastName;
+	this.email = email;
+	this.password = password;
+	this.cash = cash;
+	this.accountNum = MutualFundAccount.getAccountSeed() + "";
+	
 }
 
 /**ACCESORS*/
@@ -74,7 +90,7 @@ public Customer(String firstName, String lastName, String email, String password
 * @return the first name
 */
 public String getFirstName() {
-return null;
+return this.firstName;
 }
 
 /**
@@ -82,7 +98,7 @@ return null;
 * @return the last name
 */
 public String getLastName() {
-return null;
+return this.lastName;
 }
 
 /**
@@ -90,7 +106,7 @@ return null;
 * @return the account number
 */
 public String getAccountNum() {
-return null;
+return this.accountNum;
 }
 
 /**
@@ -98,7 +114,7 @@ return null;
 * @return the email address
 */
 public String getEmail() {
-return null;
+return this.email;
 }
 
 /** Determines whether a given password matches the customer password 
@@ -106,7 +122,10 @@ return null;
 * @return whether the two passwords match 
 */ 
 public boolean passwordMatch(String anotherPassword) { 
-return false; 
+	if(this.password == anotherPassword) {
+		return true;
+	}
+	return false;
 }
 
 
@@ -124,7 +143,7 @@ return null;
 * @return the amount of cash
 */
 public double getCash() {
-return 0.0;
+return cash;
 }
 
 /**
@@ -144,7 +163,7 @@ return false;
 * @param firstName a new first name
 */
 public void setFirstName(String firstName) {
-
+	this.firstName = firstName;
 }
 
 /**
@@ -152,7 +171,7 @@ public void setFirstName(String firstName) {
 * @param lastName a new last name
 */
 public void setLastName(String lastName) {
-
+	this.lastName = lastName;
 }
 
 /**
@@ -160,7 +179,7 @@ public void setLastName(String lastName) {
 * @param name the Customer's email address
 */
 public void setEmail(String email) {
-
+	this.email = email;
 }
 
 /**
@@ -168,7 +187,7 @@ public void setEmail(String email) {
 * @param name the Customer password
 */
 public void setPassword(String password) {
-
+	this.password = password;
 }
 
 /**
@@ -177,7 +196,7 @@ public void setPassword(String password) {
 * @param cash the amount of cash to add
 */
 public void updateCash(double cash) {
-
+	this.cash = cash;
 }
 
 /**
