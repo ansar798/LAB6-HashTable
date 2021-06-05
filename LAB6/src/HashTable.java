@@ -50,7 +50,7 @@ public class HashTable<T> {
 	 */
 	public int countBucket(int index) throws IndexOutOfBoundsException {
 		if (index < 0 || index >= Table.size()) {
-			throw new IndexOutOfBoundsException("countBucket: iindex is outside bounds of the table");
+			throw new IndexOutOfBoundsException("countBucket(): index is outside bounds of the table");
 		}
 		return Table.get(index).getLength();
 	}
@@ -159,7 +159,10 @@ public class HashTable<T> {
 	 * Clears this hash table so that it contains no keys.
 	 */
 	public void clear() {
-
+		for (int i = 0; i < Table.size(); i++) {
+			Table.set(i, new List<>());
+		}
+		this.numElements = 0;
 	}
 
 	/** Additional Methods */
@@ -173,7 +176,7 @@ public class HashTable<T> {
 	 * @param bucket the index in the Table
 	 */
 	public void printBucket(int bucket) {
-		System.out.print("Printing bucket #  " + bucket + ":");
+		System.out.print("Printing bucket #" + bucket + ":\n");
 		System.out.println(Table.get(bucket).printNumberList());
 	}
 
@@ -184,8 +187,16 @@ public class HashTable<T> {
 	 * empty." followed by two blank lines
 	 */
 	public void printTable() {
-		for (int i = 0; i != Table.size(); i++)
-			System.out.println("table: " + Table.get(i).toString());
+		for (int i = 0; i < Table.size(); i++) {
+			System.out.println("Bucket: " + i);
+			if (Table.get(i).isEmpty()) {
+				System.out.println("This bucket is empty.\n\n");
+			} else {
+				System.out.println(
+						Table.get(i).getFirst() + "\n+ " + (Table.get(i).getLength() - 1) + " more at this bucket");
+				System.out.print("\n\n");
+			}
+		}
 	}
 
 	/**
