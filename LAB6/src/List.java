@@ -1,140 +1,398 @@
 
 /**
- * HashTableTest.java
- * 
- * @author
- * @author CIS 22C, Lab 6 TODO: Add more method calls!
+ * Defines a double-linked list class
+ * @author Ansar Shaikh
+ * @author Yadwinder Grewal
+ * CIS 22C, Lab 3
  */
 
-public class HashTableTest {
-	public static void main(String[] args) {
+import java.util.NoSuchElementException;
 
-/////////////////////////////////////////////		
-//Default Constructor 
-/////////////////////////////////////////////
-		System.out.println("***Testing default constructor***");
-		HashTable<Movie> defaultConstructor = new HashTable<Movie>(1);
-		Movie bond0 = new Movie("Spiderman", "Test actor", 1962, 59.5);
-		System.out.println("Default constructor size value: (0) " + defaultConstructor.getNumElements());
-		defaultConstructor.insert(bond0);
-		System.out.println("Default constructor size value: (1) " + defaultConstructor.getNumElements());
-		// System.out.println("get value: () " + defaultConstructor.get(bond0));
+public class List<T> {
+	private class Node {
+		private T data;
+		private Node next;
+		private Node prev;
 
-		HashTable<Movie> t = new HashTable<Movie>(20);
-		Movie bond1 = new Movie("Dr No", "Terence Young", 1962, 59.5);
-		Movie bond2 = new Movie("From Russia with Love", "Terence Young", 1963, 79.0);
-		Movie bond3 = new Movie("Goldfinger", "Guy Hamilton", 1964, 125.0);
-		Movie bond4 = new Movie("Thunderball", "Kevin McClory", 1965, 141.2);
-		Movie bond5 = new Movie("Casino Royale", "Ken Hughes", 1967, 41.7);
-		Movie bond6 = new Movie("You Only Live Twice", "Lewis Gilbert", 1967, 111.6);
-		Movie bond7 = new Movie("On Her Majesty's Secret Service", "Peter R. Hunt", 1969, 82.0);
-		Movie bond8 = new Movie("Diamonds are Forever", "Guy Hamilton", 1971, 116.0);
-		Movie bond9 = new Movie("Live and Let Die", "Guy Hamilton", 1973, 161.8);
-		Movie bond10 = new Movie("The Man with the Golden Gun", "Guy Hamilton", 1974, 97.6);
-
-/////////////////////////////////////////////		
-//insert()
-/////////////////////////////////////////////
-		System.out.println("\n\n***Testing Insert and toString***");
-		t.insert(bond1);
-		t.insert(bond2);
-		t.insert(bond3);
-		t.insert(bond4);
-		t.insert(bond5);
-		t.insert(bond6);
-		t.insert(bond7);
-		t.insert(bond8);
-		t.insert(bond9);
-		t.insert(bond10);
-		System.out.print(t);
-		System.out.print("\nInserted 10 movies, size should be 10: " + t.getNumElements());
-		System.out.print("\nShould print error, inserting null: ");
-		try {
-			t.insert(null);
-		} catch (NullPointerException e) {
-			System.out.println("\n" + e);
+		public Node(T data) {
+			this.data = data;
+			this.next = null;
+			this.prev = null;
 		}
-		// ;
+	}
 
-/////////////////////////////////////////////		
-//get()
-/////////////////////////////////////////////
-		System.out.println("\n***Testing Get***\n");
-		Movie m = new Movie("Diamonds are Forever", "Guy Hamilton");
-		Movie n = new Movie("MovieNotFound", "Fake Actor");
-		m = t.get(m);
-		if (m != null) {
-			System.out.println("Get did locate Diamonds Are Forever:");
-			System.out.println(m);
+	private int length;
+	private Node first;
+	private Node last;
+	private Node iterator;
+
+	/**** CONSTRUCTOR ****/
+
+	/**
+	 * Instantiates a new List with default values
+	 * 
+	 * @postcondition a list object created with default values
+	 */
+	public List() {
+		first = null;
+		last = null;
+		iterator = null;
+		length = 0;
+	}
+
+	/**
+	 * Instantiates a new List by copying another List
+	 * 
+	 * @param original the List to make a copy of
+	 * @postcondition a new List object, which is an identical but separate copy of
+	 *                the List original
+	 */
+	public List(List<T> original) {
+		if (original == null) {
+			return;
+		}
+		if (original.length == 0) {
+			length = 0;
+			first = null;
+			last = null;
+			iterator = null;
 		} else {
-			System.out.println("Get did not locate MovieNotFound");
+			Node temp = original.first;
+			while (temp != null) {
+				addLast(temp.data);
+				temp = temp.next;
+			}
+			iterator = null;
 		}
+	}
 
-		try {
-			n = t.get(n);
-		} catch (NullPointerException e) {
-			System.out.println("\n" + e);
+	/**** ACCESSORS ****/
+
+	/**
+	 * Returns the value stored in the first node
+	 * 
+	 * @precondition length != 0
+	 * @return the value stored at node first
+	 * @throws NoSuchElementException when precondition is violated
+	 */
+	public T getFirst() throws NoSuchElementException {
+		if (length == 0) {
+			throw new NoSuchElementException("getFirst: " + "List is empty, no data to access");
 		}
+		return first.data;
+	}
 
-		System.out.println("\n***Testing PrintBucket for Index 19***\n");
-		t.printBucket(19);
+	/**
+	 * Returns the value stored in the last node
+	 * 
+	 * @precondition length != 0
+	 * @return the value stored in the last node
+	 * @throws NoSuchElementException when precondition is violated
+	 */
+	public T getLast() throws NoSuchElementException {
+		if (length == 0) {
+			throw new NoSuchElementException("getLast: List is Empty. No data to access!");
+		}
+		return last.data;
+	}
 
-		System.out.println("\n***Testing Remove***\n");
-		t.remove(bond9);
-		System.out.println(bond9.getTitle() + " should be removed from this index: \n");
-		t.printBucket(19);
+	/**
+	 * Returns the current length of the list
+	 * 
+	 * @return the number of elements in the list
+	 */
+	public int getLength() {
+		return this.length;
+	}
 
-		boolean inTable = t.contains(bond9);
-		inTable = t.contains(bond9);
-		if (inTable) {
-			System.out.println(bond9.getTitle() + " is stored in the table");
+	/**
+	 * Returns the current iterator
+	 * 
+	 * @return iterator node data
+	 */
+	public T getIterator() throws NullPointerException {
+		if (iterator == null) {
+			throw new NullPointerException("getIterator: " + "Iterator is null, can not access its data");
+		}
+		return iterator.data;
+	}
+
+	/**
+	 * Returns whether the list is currently empty
+	 * 
+	 * @return true/false whether the list is empty
+	 */
+	public boolean isEmpty() {
+		return length == 0;
+	}
+
+	/**** MUTATORS ****/
+
+	/**
+	 * Creates a new first element
+	 * 
+	 * @param the data to insert at the front of the list
+	 * @postcondition a new first element in the list
+	 */
+	public void addFirst(T data) {
+		if (first == null) {
+			first = last = new Node(data);
 		} else {
-			System.out.println(bond9.getTitle() + " is not stored in the table");
+			Node N = new Node(data);
+			N.next = first;
+			first.prev = N;
+			first = N;
 		}
+		length++;
+	}
 
-		System.out.println("\n***Testing printTable***\n");
-		t.printTable();
-		HashTable<Movie> tEmpty = new HashTable<Movie>(2);
-		System.out.println("Print an empty table: ");
-		tEmpty.printTable();
-/////////////////////////////////////////////		
-//contains()
-/////////////////////////////////////////////
-		System.out.println("\n***Testing contains***\n");
-		System.out.print("Contains: (true) ");
-		System.out.println(t.contains(m));
-		System.out.print("Contains: (false) - should print error: ");
-		try {
-			System.out.println(t.contains(n));
-		} catch (NullPointerException e) {
-			System.out.println("\n" + e);
-		}
-
-		System.out.println("\n***Testing CountBucket***\n");
-		int count = t.countBucket(19);
-		System.out.println("There are " + count + " movies at bucket 19");
-		System.out.print("Should print error when counting out of bounds: ");
-		try {
-			count = t.countBucket(20);
-		} catch (IndexOutOfBoundsException e) {
-			System.out.println("\n" + e);
-		}
-
-		System.out.println("\n***Testing Contains***\n");
-		inTable = t.contains(bond9);
-		if (inTable) {
-			System.out.println(bond9.getTitle() + " is stored in the table");
+	/**
+	 * Create a new last element
+	 * 
+	 * @param the data to insert at the end of the list
+	 * @postcondition a new data node added at the end of the list
+	 */
+	public void addLast(T data) {
+		if (first == null) {
+			first = last = new Node(data);
 		} else {
-			System.out.println(bond9.getTitle() + " is not stored in the table");
+			Node N = new Node(data);
+			last.next = N;
+			N.prev = last;
+			last = N;
+		}
+		length++;
+	}
+
+	/**
+	 * removes the element at the front of the list
+	 * 
+	 * @precondition length != 0
+	 * @postcondition first element in the list removed
+	 * @throws NoSuchElementException when precondition is violated
+	 */
+	public void removeFirst() throws NoSuchElementException {
+		if (length == 0) {
+			throw new NoSuchElementException("removeFirst(): Cannot remove from an empty List!");
+		} else if (length == 1) {
+			first = last = null;
+		} else {
+			first = first.next;
+			first.prev = null;
+		}
+		length--;
+	}
+
+	/**
+	 * removes the element at the end of the list
+	 * 
+	 * @precondition length != 0
+	 * @postcondition last element in the list removed
+	 * @throws NoSuchElementException when precondition is violated
+	 */
+	public void removeLast() throws NoSuchElementException {
+		if (length == 0) {
+			throw new NoSuchElementException("removeLast: list is empty. Nothing to remove.");
+		} else if (length == 1) {
+			first = last = null;
+		} else {
+			last = last.prev;
+			last.next = null;
+		}
+		length--;
+	}
+
+	/**
+	 * return whether the iterator is off the list
+	 */
+	public boolean offEnd() {
+		return iterator == null;
+	}
+
+	/**
+	 * Determines whether two Lists have the same data in the same order
+	 * 
+	 * @param L the List to compare to this List
+	 * @return whether the two Lists are equal
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public boolean equals(Object o) {
+		if (o == this) {
+			return true;
+		} else if (!(o instanceof List)) {
+			return false;
+		} else {
+			List<T> L = (List<T>) o;
+			if (this.length != L.length) {
+				return false;
+			} else {
+				Node temp1 = this.first;
+				Node temp2 = L.first;
+				while (temp1 != null) { // Lists are same length
+					if (!(temp1.data.equals(temp2.data))) {
+						return false;
+					}
+					temp1 = temp1.next;
+					temp2 = temp2.next;
+				}
+				return true;
+			}
+		}
+	}
+
+	/**
+	 * removes the element currently pointed to by iterator
+	 * 
+	 * @precondition iterator != null
+	 * @postcondition iterator points to null
+	 * @throws NoSuchElementException when precondition is violated
+	 */
+	public void removeIterator() throws NoSuchElementException {
+		if (offEnd()) {
+			throw new NullPointerException("removeIterator:  iterator is null, can not remove");
+		} else if (iterator == first) {
+			removeFirst();
+		} else if (iterator == last) {
+			removeLast();
+		} else {
+			iterator.prev.next = iterator.next;
+			iterator.next.prev = iterator.prev;
+			length--;
+		}
+		iterator = null;
+	}
+
+	/**
+	 * Place the iterator to the start of the list
+	 * 
+	 * @postcondition iterator moved to the start of the list
+	 */
+	public void placeIterator() {
+		iterator = first;
+	}
+
+	/**
+	 * inserts an element after the Node currently pointed to iterator
+	 * 
+	 * @precondition iterator != null
+	 * @postcondition adds a node after iterator
+	 * @throws NullPointerException when the precondition is violated
+	 */
+	public void addIterator(T data) throws NullPointerException {
+		if (offEnd()) {
+			throw new NullPointerException("addIterator: " + "Iterator is off end, cannot add to list");
+		} else if (iterator == last) {
+			addLast(data);
+		} else {
+			Node N = new Node(data);
+			N.next = iterator.next;
+			N.prev = iterator;
+			iterator.next.prev = N;
+			iterator.next = N;
+			length++;
+		}
+	}
+
+	/**
+	 * Moves iterator up by one Node
+	 * 
+	 * @precondition iterator != null
+	 * @postconditions Iterator moves up by one Node
+	 * @throws NullPointerException
+	 */
+	public void advanceIterator() throws NullPointerException {
+		if (iterator == null) {
+			throw new NullPointerException("advanceIterator: " + "iterator is null, cannot be advance");
+		}
+		iterator = iterator.next;
+	}
+
+	/**
+	 * Moves iterator down by one Node
+	 * 
+	 * @precondition iterator != null
+	 * @postconditions iterator moves down by one Node
+	 * @throws NullPointerException
+	 */
+	public void reverseIterator() throws NullPointerException {
+		if (iterator == null) {
+			throw new NullPointerException("reverseIterator: " + "iterator is null cannot be reverse");
+		}
+		iterator = iterator.prev;
+	}
+
+	/**** ADDITIONAL OPERATIONS ****/
+
+	/**
+	 * List with each value on its own line at the end of the List a new line
+	 * 
+	 * @return the List as a String for display
+	 */
+	@Override
+	public String toString() {
+		String result = "";
+		Node temp = first;
+		while (temp != null) {
+			result += temp.data + " ";
+			temp = temp.next;
+		}
+		return result + "\n";
+	}
+
+	/**
+	 * Points the iterator at first and then advances it to the specified index
+	 * 
+	 * @param index the index where the iterator should be placed
+	 * @precondition 0 < index <= length
+	 * @throws IndexOutOfBoundsException when precondition is violated
+	 */
+	public void iteratorToIndex(int index) throws IndexOutOfBoundsException {
+		if (index > length || index < 0) {
+			throw new IndexOutOfBoundsException("iteratorToIndex: " + "index not in the List");
+		} else {
+			placeIterator();
+			for (int i = 1; i < index; i++) {
+				advanceIterator();
+			}
 		}
 
-		System.out.println("\n***Testing Clear()***\n");
-		System.out.println("Table size before clear (9): " + t.getNumElements());
-		t.clear();
-		System.out.println("Table size after clear (0): " + t.getNumElements());
-		System.out.println("\nTable size before clear on empty table (0): " + tEmpty.getNumElements());
-		tEmpty.clear();
-		System.out.println("Table size after clear on empty table (0): " + tEmpty.getNumElements());
+	}
 
+	/**
+	 * Searches the List for the specified value using the linear search algorithm
+	 * 
+	 * @param value the value to search for
+	 * @return the location of value in the List or -1 to indicate not found Note
+	 *         that if the List is empty we will consider the element to be not
+	 *         found post: position of the iterator remains unchanged
+	 */
+	public int linearSearch(T value) {
+		if (length > 0) {
+			int position = -1;
+			Node temp = first;
+			while (temp != null) {
+				position++;
+				if (temp.data.equals(value))
+					return position;
+				temp = temp.next;
+			}
+		}
+		return -1;
+	}
+
+	/**
+	 * Prints the contents of the linked list in the format #. <element>
+	 */
+	public String printNumberList() {
+		String result = "\n";
+		Node temp = first;
+		int i = 1;
+		while (temp != null) {
+			result += temp.data + "\n";
+			temp = temp.next;
+			i++;
+		}
+		return result;
 	}
 }
