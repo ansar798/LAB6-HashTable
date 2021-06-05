@@ -119,9 +119,10 @@ public class MutualFund {
 
 	@Override
 	public String toString() {
+		DecimalFormat df = new DecimalFormat("###.00");
 		return fundName + "\n"
 				+ ticker + "\n"
-				+ "Share Price: $" + pricePerShare
+				+ "Share Price: $" + df.format(pricePerShare)
 				+ "Trading Fee: " + tradingFee + "%";
 	}
 
@@ -134,7 +135,30 @@ public class MutualFund {
 	 */
 	@Override
 	public boolean equals(Object o) {
-		
+		{
+			if (o == this) {
+				return true;
+			} else if (!(o instanceof MutualFund)) {
+				return false;
+			} else {
+				MutualFund L = (MutualFund) o;
+				if (this.fundName != L.fundName) {
+					return false;
+				} else {
+//					Node temp1 = this.first;
+//					Node temp2 = L.first;
+//					while (temp1 != null) { // Lists are same length
+//						if (!(temp1.data.equals(temp2.data))) {
+//							return false;
+//						}
+//						temp1 = temp1.next;
+//						temp2 = temp2.next;
+//					}
+					return true;
+				}
+			}
+		}
+
 	}
 
 	/**
