@@ -122,7 +122,7 @@ public class Movie {
      * as follows: XXX,XXX.XX
      */
     @Override public String toString() {
-        DecimalFormat d = new DecimalFormat("###,###.0");
+        DecimalFormat d = new DecimalFormat("###,###.00");
         String result = "Title: " + title
                 + "\nDirector: " + director
                 + "\nYear: " + year
