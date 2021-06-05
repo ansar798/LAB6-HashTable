@@ -155,7 +155,7 @@ public class HashTable<T> {
      * Clears this hash table so that it contains no keys.
      */
     public void clear() {
-        
+        Table.has
     }
 
     /**Additional Methods*/
