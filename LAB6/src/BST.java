@@ -218,38 +218,32 @@ public class BST<T> {
 	 * @param data the data to search for
 	 * @param node the current node to check
 	 * @param c    the Comparator that determines how the BST is organized
-	 * @return BOOLEAN the data stored in that Node of the tree is found or null
-	 *         otherwise
+	 * @return BOOLEAN the data stored in that Node of the tree is found or null otherwise
 	 */
 	private T search(T data, Node node, Comparator<T> c) {
-		if (c.compare(data, node.data) == 0) {
-			return node.data;
-		} else if (c.compare(data, node.data) < 0) {
+		if (c.compare(data, node.data) == 0) 
+		{
+			return node.data;  
+		} 
+		else if (c.compare(data, node.data) < 0) 
+		{ 
 			if (node.left == null) {
 				return null;
 			} else {
 				return search(data, node.left, c);
-			}
+			  }
 		} // end else if
 		else {
 			if (node.right == null) {
 				return null;
-			} else {
+				}	
+			else {
 				return search(data, node.right, c);
 			}
 		}
 	}
 
-//		else if (node == null)
-//			return false;
 
-//		if (data.compareTo(node.data) == 0) {
-//			return true;
-//		} else if (data.compareTo(node.data) > 0) {
-//			return search(data, node.right);
-//		} else {
-//			return search(data, node.left);
-//		}
 
 	/*** MUTATORS ***/
 
@@ -289,20 +283,6 @@ public class BST<T> {
 				insert(data, node.right, c);
 			}
 		}
-
-//		if (data.compareTo(node.data) <= 0) {
-//			if (node.left == null) {
-//				node.left = new Node(data);
-//			} else {
-//				insert(data, node.left);
-//			}
-//		} else {
-//			if (node.right == null) {
-//				node.right = new Node(data);
-//			} else {
-//				insert(data, node.right);
-//			}  // end else
-//		}  // end else
 	} // end insert
 
 	/**
@@ -336,11 +316,11 @@ public class BST<T> {
 			node.right = remove(data, node.right, c);
 		} else {
 			if ((node.left == null) && (node.right == null)) {
-				return null;
+				 node = null;
 			} else if (node.left != null && node.right == null) {
-				return node = node.left;
+				 node = node.left;
 			} else if ((node.left == null) && (node.right != null)) {
-				return node = node.right;
+				 node = node.right;
 			} else {
 				T temp = findMin(node.right);
 				node.data = temp;
@@ -388,9 +368,9 @@ public class BST<T> {
 		if (node == null) {
 			return;
 		} else {
-			preOrderPrint(node.left);
+			inOrderPrint(node.left);
 			System.out.print(node.data + " ");
-			preOrderPrint(node.right);
+			inOrderPrint(node.right);
 		}
 	}
 
@@ -409,8 +389,8 @@ public class BST<T> {
 		if (node == null) {
 			return;
 		} else {
-			preOrderPrint(node.left);
-			preOrderPrint(node.right);
+			postOrderPrint(node.left);
+			postOrderPrint(node.right);
 			System.out.print(node.data + " ");
 		}
 	}
