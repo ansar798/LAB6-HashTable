@@ -1,7 +1,7 @@
 /**
 * CustomerInterface.java
-* @author PARTNER1_NAME_HERE
-* @authoer PARTNER2_NAME_HERE
+* @author Yadwinder Grewal
+* @author Ansar Shaikh
 * CIS 22C, Lab 6
 */
 import java.io.*;

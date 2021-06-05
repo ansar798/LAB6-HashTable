@@ -1,4 +1,3 @@
-
 /**
  * HashTableTest.java
  * 
@@ -31,6 +30,11 @@ public class HashTableTest {
 		Movie bond8 = new Movie("Diamonds are Forever", "Guy Hamilton", 1971, 116.0);
 		Movie bond9 = new Movie("Live and Let Die", "Guy Hamilton", 1973, 161.8);
 		Movie bond10 = new Movie("The Man with the Golden Gun", "Guy Hamilton", 1974, 97.6);
+
+/////////////////////////////////////////////		
+//insert()
+/////////////////////////////////////////////
+		System.out.println("\n\n***Testing Insert and toString***");
 		t.insert(bond1);
 		t.insert(bond2);
 		t.insert(bond3);
@@ -41,7 +45,15 @@ public class HashTableTest {
 		t.insert(bond8);
 		t.insert(bond9);
 		t.insert(bond10);
-		// t.insert(null);
+		System.out.print(t);
+		System.out.print("\nInserted 10 movies, size should be 10: " + t.getNumElements());
+		System.out.print("\nShould print error, inserting null: ");
+		try {
+			t.insert(null);
+		} catch (NullPointerException e) {
+			System.out.println("\n" + e);
+		}
+		// ;
 
 /////////////////////////////////////////////		
 //get()
@@ -63,6 +75,27 @@ public class HashTableTest {
 			System.out.println("\n" + e);
 		}
 
+		System.out.println("\n***Testing PrintBucket for Index 19***\n");
+		t.printBucket(19);
+
+		System.out.println("\n***Testing Remove***\n");
+		t.remove(bond9);
+		System.out.println(bond9.getTitle() + " should be removed from this index: \n");
+		t.printBucket(19);
+
+		boolean inTable = t.contains(bond9);
+		inTable = t.contains(bond9);
+		if (inTable) {
+			System.out.println(bond9.getTitle() + " is stored in the table");
+		} else {
+			System.out.println(bond9.getTitle() + " is not stored in the table");
+		}
+
+		System.out.println("\n***Testing printTable***\n");
+		t.printTable();
+		HashTable<Movie> tEmpty = new HashTable<Movie>(2);
+		System.out.println("Print an empty table: ");
+		tEmpty.printTable();
 /////////////////////////////////////////////		
 //contains()
 /////////////////////////////////////////////
@@ -76,51 +109,31 @@ public class HashTableTest {
 			System.out.println("\n" + e);
 		}
 
-/////////////////////////////////////////////		
-//insert()
-/////////////////////////////////////////////
-		System.out.println("\n\n***Testing Insert ***");
-		System.out.print("\nShould print error, inserting null: ");
+		System.out.println("\n***Testing CountBucket***\n");
+		int count = t.countBucket(19);
+		System.out.println("There are " + count + " movies at bucket 19");
+		System.out.print("Should print error when counting out of bounds: ");
 		try {
-			t.insert(null);
-		} catch (NullPointerException e) {
+			count = t.countBucket(20);
+		} catch (IndexOutOfBoundsException e) {
 			System.out.println("\n" + e);
 		}
-		// System.out.print(t);
-		t.insert(n);
-		System.out.print("Contains: (true) ");
-		System.out.println(t.contains(n));
 
-		System.out.println("***Testing CountBucket***\n");
-		int count = t.countBucket(19);
-		System.out.println("There are " + count + " movies at bucket 19\n");
-
-		System.out.println("***Testing Contains***\n");
-		boolean inTable = t.contains(bond9);
-		if (inTable) {
-			System.out.println(bond9.getTitle() + " is stored in the table");
-		} else {
-			System.out.println(bond9.getTitle() + " is not stored in the table");
-		}
-
-		System.out.println("***Testing printTable***\n");
-		t.printTable();
-
-		System.out.println("\n***Testing PrintBucket for Index 19***\n");
-
-		t.printBucket(19);
-
-		System.out.println("\n***Testing Remove***\n");
-		t.remove(bond9);
-		System.out.println(bond9.getTitle() + " should be removed from this index: \n");
-		t.printBucket(19);
-
+		System.out.println("\n***Testing Contains***\n");
 		inTable = t.contains(bond9);
 		if (inTable) {
 			System.out.println(bond9.getTitle() + " is stored in the table");
 		} else {
 			System.out.println(bond9.getTitle() + " is not stored in the table");
 		}
+
+		System.out.println("\n***Testing Clear()***\n");
+		System.out.println("Table size before clear (9): " + t.getNumElements());
+		t.clear();
+		System.out.println("Table size after clear (0): " + t.getNumElements());
+		System.out.println("\nTable size before clear on empty table (0): " + tEmpty.getNumElements());
+		tEmpty.clear();
+		System.out.println("Table size after clear on empty table (0): " + tEmpty.getNumElements());
 
 	}
 }
