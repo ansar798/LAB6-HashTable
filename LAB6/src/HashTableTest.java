@@ -1,8 +1,8 @@
 /**
  * HashTableTest.java
  * 
- * @author
- * @author CIS 22C, Lab 6 TODO: Add more method calls!
+ * @author Ansar Shaikh
+ * @author Yadwinder Grewal CIS 22C, Lab 6
  */
 
 public class HashTableTest {
@@ -17,7 +17,6 @@ public class HashTableTest {
 		System.out.println("Default constructor size value: (0) " + defaultConstructor.getNumElements());
 		defaultConstructor.insert(bond0);
 		System.out.println("Default constructor size value: (1) " + defaultConstructor.getNumElements());
-		// System.out.println("get value: () " + defaultConstructor.get(bond0));
 
 		HashTable<Movie> t = new HashTable<Movie>(20);
 		Movie bond1 = new Movie("Dr No", "Terence Young", 1962, 59.5);
@@ -32,7 +31,7 @@ public class HashTableTest {
 		Movie bond10 = new Movie("The Man with the Golden Gun", "Guy Hamilton", 1974, 97.6);
 
 /////////////////////////////////////////////		
-//insert()
+//insert() and toString()
 /////////////////////////////////////////////
 		System.out.println("\n\n***Testing Insert and toString***");
 		t.insert(bond1);
@@ -45,7 +44,7 @@ public class HashTableTest {
 		t.insert(bond8);
 		t.insert(bond9);
 		t.insert(bond10);
-		System.out.print(t);
+		System.out.println(t);
 		System.out.print("\nInserted 10 movies, size should be 10: " + t.getNumElements());
 		System.out.print("\nShould print error, inserting null: ");
 		try {
@@ -53,7 +52,6 @@ public class HashTableTest {
 		} catch (NullPointerException e) {
 			System.out.println("\n" + e);
 		}
-		// ;
 
 /////////////////////////////////////////////		
 //get()
@@ -66,18 +64,28 @@ public class HashTableTest {
 			System.out.println("Get did locate Diamonds Are Forever:");
 			System.out.println(m);
 		} else {
+			System.out.println("Get did not locate Diamonds Are Forever");
+		}
+
+		n = t.get(n);
+		if (n != null) {
+			System.out.println("Get did locate MovieNotFound:");
+			System.out.println(n);
+		} else {
 			System.out.println("Get did not locate MovieNotFound");
 		}
 
-		try {
-			n = t.get(n);
-		} catch (NullPointerException e) {
-			System.out.println("\n" + e);
-		}
-
+/////////////////////////////////////////////		
+//PrintBucket()
+/////////////////////////////////////////////
 		System.out.println("\n***Testing PrintBucket for Index 19***\n");
 		t.printBucket(19);
+		System.out.println("\n***Testing PrintBucket for Index 1 (empty)***\n");
+		t.printBucket(1);
 
+/////////////////////////////////////////////		
+//Remove()
+/////////////////////////////////////////////
 		System.out.println("\n***Testing Remove***\n");
 		t.remove(bond9);
 		System.out.println(bond9.getTitle() + " should be removed from this index: \n");
@@ -91,23 +99,18 @@ public class HashTableTest {
 			System.out.println(bond9.getTitle() + " is not stored in the table");
 		}
 
+/////////////////////////////////////////////		
+//printTable()
+/////////////////////////////////////////////
 		System.out.println("\n***Testing printTable***\n");
 		t.printTable();
 		HashTable<Movie> tEmpty = new HashTable<Movie>(2);
 		System.out.println("Print an empty table: ");
 		tEmpty.printTable();
+
 /////////////////////////////////////////////		
-//contains()
+//CountBucket()
 /////////////////////////////////////////////
-		System.out.println("\n***Testing contains***\n");
-		System.out.print("Contains: (true) ");
-		System.out.println(t.contains(m));
-		System.out.print("Contains: (false) - should print error: ");
-		try {
-			System.out.println(t.contains(n));
-		} catch (NullPointerException e) {
-			System.out.println("\n" + e);
-		}
 
 		System.out.println("\n***Testing CountBucket***\n");
 		int count = t.countBucket(19);
@@ -119,6 +122,9 @@ public class HashTableTest {
 			System.out.println("\n" + e);
 		}
 
+/////////////////////////////////////////////		
+//contains()
+/////////////////////////////////////////////
 		System.out.println("\n***Testing Contains***\n");
 		inTable = t.contains(bond9);
 		if (inTable) {
@@ -126,7 +132,18 @@ public class HashTableTest {
 		} else {
 			System.out.println(bond9.getTitle() + " is not stored in the table");
 		}
+		System.out.print("Contains: (true) ");
+		System.out.println(t.contains(m));
+		System.out.print("Contains: (false) - should print error: ");
+		try {
+			System.out.println(t.contains(n));
+		} catch (NullPointerException e) {
+			System.out.println("\n" + e);
+		}
 
+/////////////////////////////////////////////		
+//clear()
+/////////////////////////////////////////////
 		System.out.println("\n***Testing Clear()***\n");
 		System.out.println("Table size before clear (9): " + t.getNumElements());
 		t.clear();
